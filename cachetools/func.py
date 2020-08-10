@@ -13,6 +13,7 @@ except ImportError:  # pragma: no cover
 
 from . import keys
 from .lfu import LFUCache
+from .lfu_untyped import UntypedLFUCache
 from .lru import LRUCache
 from .rr import RRCache
 from .ttl import TTLCache
@@ -101,9 +102,14 @@ def lfu_cache(maxsize=128, typed=False):
     if maxsize is None:
         return _cache(_UnboundCache(), typed)
     elif callable(maxsize):
-        return _cache(LFUCache(128), typed)(maxsize)
+        # TODO: Need unit tests for *typed* caches with callable maxsize.
+        if not typed:
+            return _cache(UntypedLFUCache(128), False)(maxsize)
+        return _cache(LFUCache(128), True)(maxsize)
     else:
-        return _cache(LFUCache(maxsize), typed)
+        if not typed:
+            return _cache(UntypedLFUCache(maxsize), False)
+        return _cache(LFUCache(maxsize), True)
 
 
 def lru_cache(maxsize=128, typed=False):
