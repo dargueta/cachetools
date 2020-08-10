@@ -10,11 +10,11 @@ from .ttl import TTLCache
 
 __all__ = (
     'Cache',
-    'UntypedLFUCache',
     'LFUCache',
     'LRUCache',
     'RRCache',
     'TTLCache',
+    'UntypedLFUCache',
     'cached',
     'cachedmethod'
 )
